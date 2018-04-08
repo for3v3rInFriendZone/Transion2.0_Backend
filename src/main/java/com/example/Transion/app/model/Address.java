@@ -1,5 +1,6 @@
 package com.example.Transion.app.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Address {
 
 	@Id
-	private String id;
+	private ObjectId id;
 
 	private String country;
 
@@ -73,7 +74,7 @@ public class Address {
 		this.zipCode = zipCode;
 	}
 
-	public String getId() {
+	public ObjectId getId() {
 		return id;
 	}
 }

@@ -1,5 +1,6 @@
 package com.example.Transion.app.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.Transion.app.model.Address;
 import com.example.Transion.app.model.TransionUser;
 import com.example.Transion.app.service.TransionUserService;
 
@@ -55,6 +57,16 @@ public class TransionUserController {
 		}
 
 		user.setPassword(transionUserService.passwordEncrypt(user.getPassword()));
+		return new ResponseEntity<TransionUser>(transionUserService.save(user), HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value = "/save", method = RequestMethod.GET)
+	public ResponseEntity<TransionUser> save() {
+		List<String> li = new ArrayList<>();
+		li.add("admin");
+		TransionUser user = new TransionUser("Petar", "Petrovic", "petar.petrovic", transionUserService.passwordEncrypt("admin"), "0802993880018", 
+				"pera@gmail.com", "1122233", new Address("Srbija", "Novi Sad", "Bulevar", 1, "24000"), li);
+
 		return new ResponseEntity<TransionUser>(transionUserService.save(user), HttpStatus.CREATED);
 	}
 

@@ -2,16 +2,20 @@ package com.example.Transion.app.model;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import com.example.Transion.app.util.CascadeSave;
 
 @Document(collection = "transionUsers")
 public class TransionUser {
 
 	@Id
-	private String id;
+	private ObjectId id;
 
 	private String firstname;
 
@@ -29,7 +33,8 @@ public class TransionUser {
 	
 	private List<String> authorities;
 
-	@Field
+	@DBRef
+	@CascadeSave
 	private Address address;
 
 	public TransionUser() {
@@ -114,7 +119,7 @@ public class TransionUser {
 		this.address = address;
 	}
 
-	public String getId() {
+	public ObjectId getId() {
 		return id;
 	}
 
