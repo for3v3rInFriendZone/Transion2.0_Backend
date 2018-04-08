@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Transion.app.model.TransionUser;
 import com.example.Transion.app.service.TransionUserService;
 
 @RestController
-@RequestMapping(value = "api/transionUser")
+@RequestMapping(value = "/api/transionUser")
 public class TransionUserController {
 
 	@Autowired
@@ -53,6 +54,7 @@ public class TransionUserController {
 			return new ResponseEntity<TransionUser>(HttpStatus.PRECONDITION_FAILED);
 		}
 
+		user.setPassword(transionUserService.passwordEncrypt(user.getPassword()));
 		return new ResponseEntity<TransionUser>(transionUserService.save(user), HttpStatus.CREATED);
 	}
 
@@ -81,4 +83,8 @@ public class TransionUserController {
 		return new ResponseEntity<TransionUser>(HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/findemail", method = RequestMethod.GET, params = { "email" })
+	public ResponseEntity<TransionUser> findByEmail(@RequestParam(value = "email") String email){
+		return new ResponseEntity<TransionUser>(transionUserService.findByEmail(email), HttpStatus.OK);
+	}
 }

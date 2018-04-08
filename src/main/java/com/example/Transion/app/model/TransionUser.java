@@ -1,5 +1,7 @@
 package com.example.Transion.app.model;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -24,6 +26,8 @@ public class TransionUser {
 	private String email;
 
 	private String phoneNumber;
+	
+	private List<String> authorities;
 
 	@Field
 	private Address address;
@@ -33,7 +37,7 @@ public class TransionUser {
 	}
 
 	public TransionUser(String firstname, String lastname, String username, String password, String jmbg, String email,
-			String phoneNumber, Address address) {
+			String phoneNumber, Address address, List<String> authorities) {
 		super();
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -43,6 +47,7 @@ public class TransionUser {
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		this.address = address;
+		this.authorities = authorities;
 	}
 
 	public String getFirstname() {
@@ -111,5 +116,13 @@ public class TransionUser {
 
 	public String getId() {
 		return id;
+	}
+
+	public List<String> getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(List<String> authorities) {
+		this.authorities = authorities;
 	}
 }
