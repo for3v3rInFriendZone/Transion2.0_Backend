@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.Transion.app.model.TransionUser;
@@ -60,6 +61,17 @@ public class TransionUserServiceImpl implements TransionUserService {
 	@Override
 	public void deleteAll(List<TransionUser> items) {
 		transionUserRepo.deleteAll(items);
+	}
+
+	@Override
+	public TransionUser findByEmail(String email) {
+		return transionUserRepo.findByEmail(email);
+	}
+
+	@Override
+	public String passwordEncrypt(String password) {
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		return passwordEncoder.encode(password);
 	}
 
 }

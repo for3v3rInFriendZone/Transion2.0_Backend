@@ -8,4 +8,5 @@ import com.example.Transion.app.model.TransionUser;
 @Repository
 public interface TransionUserRepository extends MongoRepository<TransionUser, String>{
 
+	public TransionUser findByEmail(String email);
 }
