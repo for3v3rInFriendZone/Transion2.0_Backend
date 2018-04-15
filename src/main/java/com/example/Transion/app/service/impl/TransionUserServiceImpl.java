@@ -64,14 +64,14 @@ public class TransionUserServiceImpl implements TransionUserService {
 	}
 
 	@Override
-	public TransionUser findByEmail(String email) {
-		return transionUserRepo.findByEmail(email);
-	}
-
-	@Override
 	public String passwordEncrypt(String password) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		return passwordEncoder.encode(password);
+	}
+
+	@Override
+	public TransionUser findByUsername(String username) {
+		return transionUserRepo.findByUsername(username);
 	}
 
 }

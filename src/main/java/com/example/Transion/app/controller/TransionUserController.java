@@ -95,8 +95,8 @@ public class TransionUserController {
 		return new ResponseEntity<TransionUser>(HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/findemail", method = RequestMethod.GET, params = { "email" })
-	public ResponseEntity<TransionUser> findByEmail(@RequestParam(value = "email") String email){
-		return new ResponseEntity<TransionUser>(transionUserService.findByEmail(email), HttpStatus.OK);
+	@RequestMapping(value = "/findemail", method = RequestMethod.GET, params = { "username" })
+	public ResponseEntity<TransionUser> findByEmail(@RequestParam(value = "username") String username){
+		return new ResponseEntity<TransionUser>(transionUserService.findByUsername(username), HttpStatus.OK);
 	}
 }

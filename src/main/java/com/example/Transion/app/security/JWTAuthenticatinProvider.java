@@ -34,7 +34,7 @@ public class JWTAuthenticatinProvider implements AuthenticationProvider{
 		String username = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
         
-        TransionUser user = userService.findByEmail(username);
+        TransionUser user = userService.findByUsername(username);
         
         if(user == null || !encoder.matches(password, user.getPassword())) {
         	return null;
