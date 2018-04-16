@@ -19,6 +19,7 @@ public class Address {
 
 	private Integer streetNumber;
 
+	@Indexed
 	private String zipCode;
 
 	public Address() {
@@ -77,4 +78,5 @@ public class Address {
 	public ObjectId getId() {
 		return id;
 	}
+
 }

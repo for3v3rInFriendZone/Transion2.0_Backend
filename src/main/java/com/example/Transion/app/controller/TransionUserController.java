@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Transion.app.model.Address;
 import com.example.Transion.app.model.TransionUser;
+import com.example.Transion.app.repository.AddressRepository;
 import com.example.Transion.app.service.TransionUserService;
 
 @RestController
@@ -37,7 +39,7 @@ public class TransionUserController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<TransionUser> getTransionUserById(@PathVariable("id") String id) {
+	public ResponseEntity<TransionUser> getTransionUserById(@PathVariable("id") ObjectId id) {
 		if (StringUtils.isEmpty(id)) {
 			return new ResponseEntity<TransionUser>(HttpStatus.PRECONDITION_FAILED);
 		}
@@ -64,10 +66,18 @@ public class TransionUserController {
 	public ResponseEntity<TransionUser> save() {
 		List<String> li = new ArrayList<>();
 		li.add("admin");
+		Address address = new Address("Srbija", "Novi Sad", "Bulevar", 1, "24000");
+		address = transionUserService.saveAddress(address);
 		TransionUser user = new TransionUser("Petar", "Petrovic", "petar.petrovic", transionUserService.passwordEncrypt("admin"), "0802993880018", 
-				"pera@gmail.com", "1122233", new Address("Srbija", "Novi Sad", "Bulevar", 1, "24000"), li);
+				"pera@gmail.com", "1122233", address, li);
 
 		return new ResponseEntity<TransionUser>(transionUserService.save(user), HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value = "/country", method = RequestMethod.GET)
+	public ResponseEntity<List<TransionUser>> findCountry() {
+
+		return new ResponseEntity<List<TransionUser>>(transionUserService.findByCountry("Srbija"), HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -80,7 +90,7 @@ public class TransionUserController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<TransionUser> deleteTransionUser(@PathVariable("id") String id) {
+	public ResponseEntity<TransionUser> deleteTransionUser(@PathVariable("id") ObjectId id) {
 		if (StringUtils.isEmpty(id)) {
 			return new ResponseEntity<TransionUser>(HttpStatus.PRECONDITION_FAILED);
 		}

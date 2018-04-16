@@ -7,9 +7,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
-
-import com.example.Transion.app.util.CascadeSave;
 
 @Document(collection = "transionUsers")
 public class TransionUser {
@@ -21,20 +18,22 @@ public class TransionUser {
 
 	private String lastname;
 
+	@Indexed
 	private String username;
 
 	private String password;
 
+	@Indexed
 	private String jmbg;
 
+	@Indexed
 	private String email;
 
 	private String phoneNumber;
-	
+
 	private List<String> authorities;
 
 	@DBRef
-	@CascadeSave
 	private Address address;
 
 	public TransionUser() {

@@ -3,11 +3,14 @@ package com.example.Transion.app.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.Transion.app.model.Address;
 import com.example.Transion.app.model.TransionUser;
+import com.example.Transion.app.repository.AddressRepository;
 import com.example.Transion.app.repository.TransionUserRepository;
 import com.example.Transion.app.service.TransionUserService;
 
@@ -16,9 +19,12 @@ public class TransionUserServiceImpl implements TransionUserService {
 
 	@Autowired
 	TransionUserRepository transionUserRepo;
+	
+	@Autowired
+	AddressRepository addressRepository;
 
 	@Override
-	public Boolean exists(String id) {
+	public Boolean exists(ObjectId id) {
 		Optional<TransionUser> userCheck = transionUserRepo.findById(id);
 		return userCheck.isPresent();
 	}
@@ -34,7 +40,7 @@ public class TransionUserServiceImpl implements TransionUserService {
 	}
 
 	@Override
-	public Optional<TransionUser> findOne(String id) {
+	public Optional<TransionUser> findOne(ObjectId id) {
 		return transionUserRepo.findById(id);
 	}
 
@@ -44,7 +50,7 @@ public class TransionUserServiceImpl implements TransionUserService {
 	}
 
 	@Override
-	public void delete(String id) {
+	public void delete(ObjectId id) {
 		transionUserRepo.deleteById(id);
 	}
 
@@ -72,6 +78,18 @@ public class TransionUserServiceImpl implements TransionUserService {
 	@Override
 	public TransionUser findByUsername(String username) {
 		return transionUserRepo.findByUsername(username);
+	}
+
+	@Override
+	public List<TransionUser> findByCountry(String country) {
+		// TODO Auto-generated method stub
+		return transionUserRepo.findByCountry(country);
+	}
+
+	@Override
+	public Address saveAddress(Address address) {
+		// TODO Auto-generated method stub
+		return addressRepository.save(address);
 	}
 
 }
