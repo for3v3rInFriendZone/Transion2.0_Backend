@@ -20,6 +20,14 @@ public class TransionUser {
 
 	@Indexed
 	private String username;
+	
+	private String parentsName;
+	
+	private String citizenship;
+	
+	private String sex;
+	
+	private String education;
 
 	private String password;
 
@@ -35,6 +43,11 @@ public class TransionUser {
 
 	@DBRef
 	private Address address;
+	
+	@DBRef
+	private Agency agency;
+
+	
 
 	public TransionUser() {
 		super();
@@ -52,6 +65,62 @@ public class TransionUser {
 		this.phoneNumber = phoneNumber;
 		this.address = address;
 		this.authorities = authorities;
+	}
+
+	public TransionUser(String firstname, String lastname, String username, String parentsName,
+			String citizenship, String sex, String education, String password, String jmbg, String email,
+			String phoneNumber, List<String> authorities, Address address, Agency agency) {
+		super();
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.username = username;
+		this.parentsName = parentsName;
+		this.citizenship = citizenship;
+		this.sex = sex;
+		this.education = education;
+		this.password = password;
+		this.jmbg = jmbg;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.authorities = authorities;
+		this.address = address;
+		this.agency = agency;
+	}
+
+	public String getParentsName() {
+		return parentsName;
+	}
+
+	public void setParentsName(String parentsName) {
+		this.parentsName = parentsName;
+	}
+
+	public String getCitizenship() {
+		return citizenship;
+	}
+
+	public void setCitizenship(String citizenship) {
+		this.citizenship = citizenship;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public String getEducation() {
+		return education;
+	}
+
+	public void setEducation(String education) {
+		this.education = education;
+	}
+
+	public void setId(ObjectId id) {
+		this.id = id;
 	}
 
 	public String getFirstname() {
@@ -128,5 +197,13 @@ public class TransionUser {
 
 	public void setAuthorities(List<String> authorities) {
 		this.authorities = authorities;
+	}
+	
+	public Agency getAgency() {
+		return agency;
+	}
+
+	public void setAgency(Agency agency) {
+		this.agency = agency;
 	}
 }

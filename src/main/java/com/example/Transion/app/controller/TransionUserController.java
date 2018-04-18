@@ -1,6 +1,7 @@
 package com.example.Transion.app.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Transion.app.model.Address;
+import com.example.Transion.app.model.Agency;
 import com.example.Transion.app.model.TransionUser;
 import com.example.Transion.app.repository.AddressRepository;
+import com.example.Transion.app.service.AgencyService;
 import com.example.Transion.app.service.TransionUserService;
 
 @RestController
@@ -28,6 +31,9 @@ public class TransionUserController {
 
 	@Autowired
 	TransionUserService transionUserService;
+	
+	@Autowired
+	AgencyService aService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<TransionUser>> getTransionUsers() {
@@ -68,9 +74,13 @@ public class TransionUserController {
 		li.add("admin");
 		Address address = new Address("Srbija", "Novi Sad", "Bulevar", 1, "24000");
 		address = transionUserService.saveAddress(address);
-		TransionUser user = new TransionUser("Petar", "Petrovic", "petar.petrovic", transionUserService.passwordEncrypt("admin"), "0802993880018", 
+		Agency agency = new Agency("Hello", "Hello World!!", "123", "1234", "123-12323-123", "asdas", new Date(), address, "123123", "example@example.com");
+		agency = aService.save(agency);
+		TransionUser user1 = new TransionUser("Petar", "Petrovic", "petar.petrovic", transionUserService.passwordEncrypt("admin"), "0802993880018", 
 				"pera@gmail.com", "1122233", address, li);
-
+		TransionUser user = new TransionUser("Petar", "Petrovic", "petar.petrovic", "Djoka",
+				"Srpsko", "M", "VII", transionUserService.passwordEncrypt("admin"),
+				"12314", "pera@gmail.com", "asd", li, address, agency);
 		return new ResponseEntity<TransionUser>(transionUserService.save(user), HttpStatus.CREATED);
 	}
 	
