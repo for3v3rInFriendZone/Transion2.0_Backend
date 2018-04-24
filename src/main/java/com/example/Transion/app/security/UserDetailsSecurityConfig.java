@@ -44,7 +44,7 @@ public class UserDetailsSecurityConfig extends WebSecurityConfigurerAdapter{
 	
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-    	/*http.cors().and().csrf().disable().authorizeRequests()
+    	http.cors().and().csrf().disable().authorizeRequests()
         	.antMatchers(HttpMethod.POST, "/login").permitAll()
         	.antMatchers(HttpMethod.GET, "/api/transionUser/save").permitAll()
         	.antMatchers(HttpMethod.POST, "/api/transionUser").permitAll()
@@ -52,8 +52,8 @@ public class UserDetailsSecurityConfig extends WebSecurityConfigurerAdapter{
         	.anyRequest().authenticated()
         	.and()
         	.addFilterBefore(buildJWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-        	.addFilter(new JWTAuthorizationFilter(authenticationManager()));*/
-    	http.cors().and().csrf().disable().authorizeRequests().anyRequest().permitAll();
+        	.addFilter(new JWTAuthorizationFilter(authenticationManager()));
+    	//http.cors().and().csrf().disable().authorizeRequests().anyRequest().permitAll();
     }
     
     @Bean

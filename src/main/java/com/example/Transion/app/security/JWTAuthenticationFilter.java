@@ -45,7 +45,7 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
 			 TransionUser creds = new ObjectMapper()
 					 .readValue(req.getInputStream(), TransionUser.class);
 	            
-			 UsernamePasswordAuthenticationToken upat = new UsernamePasswordAuthenticationToken(creds.getUsername(), creds.getPassword());
+			 UsernamePasswordAuthenticationToken upat = new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword());
 	            
 			 Authentication a = this.getAuthenticationManager().authenticate(upat);
 	            

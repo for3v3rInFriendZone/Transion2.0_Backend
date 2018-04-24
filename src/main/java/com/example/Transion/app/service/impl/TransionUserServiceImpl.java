@@ -31,6 +31,7 @@ public class TransionUserServiceImpl implements TransionUserService {
 
 	@Override
 	public TransionUser save(TransionUser item) {
+		item.setAddress(addressRepository.save(item.getAddress()));
 		return transionUserRepo.save(item);
 	}
 
@@ -76,8 +77,8 @@ public class TransionUserServiceImpl implements TransionUserService {
 	}
 
 	@Override
-	public TransionUser findByUsername(String username) {
-		return transionUserRepo.findByUsername(username);
+	public TransionUser findByEmail(String email) {
+		return transionUserRepo.findByEmail(email);
 	}
 
 	@Override

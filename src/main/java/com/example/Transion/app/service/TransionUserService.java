@@ -28,7 +28,7 @@ public interface TransionUserService {
 
 	public void deleteAll(List<TransionUser> items);
 	
-	public TransionUser findByUsername(String username);
+	public TransionUser findByEmail(String email);
 	
 	public String passwordEncrypt(String password);
 	

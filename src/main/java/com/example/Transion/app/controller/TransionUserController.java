@@ -117,6 +117,6 @@ public class TransionUserController {
 
 	@RequestMapping(value = "/findemail", method = RequestMethod.GET, params = { "username" })
 	public ResponseEntity<TransionUser> findByEmail(@RequestParam(value = "username") String username){
-		return new ResponseEntity<TransionUser>(transionUserService.findByUsername(username), HttpStatus.OK);
+		return new ResponseEntity<TransionUser>(transionUserService.findByEmail(username), HttpStatus.OK);
 	}
 }
