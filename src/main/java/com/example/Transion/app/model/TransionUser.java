@@ -34,12 +34,11 @@ public class TransionUser {
 	@Indexed
 	private String jmbg;
 
-	@Indexed
-	private String email;
-
 	private String phoneNumber;
 
 	private List<String> authorities;
+	
+	private Boolean isActivated;
 
 	@DBRef
 	private Address address;
@@ -47,13 +46,11 @@ public class TransionUser {
 	@DBRef
 	private Agency agency;
 
-	
-
 	public TransionUser() {
 		super();
 	}
 
-	public TransionUser(String firstname, String lastname, String username, String password, String jmbg, String email,
+	public TransionUser(String firstname, String lastname, String username, String password, String jmbg,
 			String phoneNumber, Address address, List<String> authorities) {
 		super();
 		this.firstname = firstname;
@@ -61,15 +58,14 @@ public class TransionUser {
 		this.username = username;
 		this.password = password;
 		this.jmbg = jmbg;
-		this.email = email;
 		this.phoneNumber = phoneNumber;
 		this.address = address;
 		this.authorities = authorities;
 	}
 
 	public TransionUser(String firstname, String lastname, String username, String parentsName,
-			String citizenship, String sex, String education, String password, String jmbg, String email,
-			String phoneNumber, List<String> authorities, Address address, Agency agency) {
+			String citizenship, String sex, String education, String password, String jmbg,
+			String phoneNumber, List<String> authorities, Address address, Agency agency, Boolean isActivated) {
 		super();
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -80,11 +76,19 @@ public class TransionUser {
 		this.education = education;
 		this.password = password;
 		this.jmbg = jmbg;
-		this.email = email;
 		this.phoneNumber = phoneNumber;
 		this.authorities = authorities;
 		this.address = address;
 		this.agency = agency;
+		this.isActivated = isActivated;
+	}
+	
+	public Boolean getIsActivated() {
+		return isActivated;
+	}
+
+	public void setIsActivated(Boolean isActivated) {
+		this.isActivated = isActivated;
 	}
 
 	public String getParentsName() {
@@ -161,14 +165,6 @@ public class TransionUser {
 
 	public void setJmbg(String jmbg) {
 		this.jmbg = jmbg;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public String getPhoneNumber() {

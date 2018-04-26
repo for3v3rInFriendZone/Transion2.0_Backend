@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.mail.MessagingException;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.Transion.app.model.Address;
 import com.example.Transion.app.model.Agency;
 import com.example.Transion.app.model.TransionUser;
-import com.example.Transion.app.repository.AddressRepository;
 import com.example.Transion.app.service.AgencyService;
 import com.example.Transion.app.service.TransionUserService;
 
@@ -37,17 +38,13 @@ public class TransionUserController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<TransionUser>> getTransionUsers() {
-		List<TransionUser> transionUsers = transionUserService.findAll();
-		if (transionUsers.isEmpty()) {
-			return new ResponseEntity<List<TransionUser>>(HttpStatus.NO_CONTENT);
-		}
 		return new ResponseEntity<List<TransionUser>>(transionUserService.findAll(), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<TransionUser> getTransionUserById(@PathVariable("id") ObjectId id) {
 		if (StringUtils.isEmpty(id)) {
-			return new ResponseEntity<TransionUser>(HttpStatus.PRECONDITION_FAILED);
+			return new ResponseEntity<TransionUser>(HttpStatus.BAD_REQUEST);
 		}
 
 		Optional<TransionUser> transionUser = transionUserService.findOne(id);
@@ -59,13 +56,16 @@ public class TransionUserController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TransionUser> saveTransionUser(@RequestBody TransionUser user) {
+	public ResponseEntity<TransionUser> saveTransionUser(@RequestBody TransionUser user) throws MessagingException {
 		if (user == null) {
-			return new ResponseEntity<TransionUser>(HttpStatus.PRECONDITION_FAILED);
+			return new ResponseEntity<TransionUser>(HttpStatus.BAD_REQUEST);
 		}
 
 		user.setPassword(transionUserService.passwordEncrypt(user.getPassword()));
-		return new ResponseEntity<TransionUser>(transionUserService.save(user), HttpStatus.CREATED);
+		TransionUser savedUser = transionUserService.save(user);
+		transionUserService.sendConfirmationEmail(savedUser);
+		
+		return new ResponseEntity<TransionUser>(savedUser, HttpStatus.CREATED);
 	}
 	
 	@RequestMapping(value = "/save", method = RequestMethod.GET)
@@ -76,24 +76,17 @@ public class TransionUserController {
 		address = transionUserService.saveAddress(address);
 		Agency agency = new Agency("Hello", "Hello World!!", "123", "1234", "123-12323-123", "asdas", new Date(), address, "123123", "example@example.com");
 		agency = aService.save(agency);
-		TransionUser user1 = new TransionUser("Petar", "Petrovic", "petar.petrovic", transionUserService.passwordEncrypt("admin"), "0802993880018", 
-				"pera@gmail.com", "1122233", address, li);
-		TransionUser user = new TransionUser("Petar", "Petrovic", "petar.petrovic", "Djoka",
+	//	TransionUser user1 = new TransionUser("Petar", "Petrovic", "pera@gmail.com", transionUserService.passwordEncrypt("admin"), "0802993880018", "1122233", address, li);
+		TransionUser user = new TransionUser("Petar", "Petrovic", "pera@gmail.com", "Djoka",
 				"Srpsko", "M", "VII", transionUserService.passwordEncrypt("admin"),
-				"12314", "pera@gmail.com", "asd", li, address, agency);
+				"12314", "asd", li, address, agency, true);
 		return new ResponseEntity<TransionUser>(transionUserService.save(user), HttpStatus.CREATED);
-	}
-	
-	@RequestMapping(value = "/country", method = RequestMethod.GET)
-	public ResponseEntity<List<TransionUser>> findCountry() {
-
-		return new ResponseEntity<List<TransionUser>>(transionUserService.findByCountry("Srbija"), HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<TransionUser> updateTransionUser(@RequestBody TransionUser user) {
 		if (user == null) {
-			return new ResponseEntity<TransionUser>(HttpStatus.PRECONDITION_FAILED);
+			return new ResponseEntity<TransionUser>(HttpStatus.BAD_REQUEST);
 		}
 
 		return new ResponseEntity<TransionUser>(transionUserService.save(user), HttpStatus.OK);
@@ -102,7 +95,7 @@ public class TransionUserController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<TransionUser> deleteTransionUser(@PathVariable("id") ObjectId id) {
 		if (StringUtils.isEmpty(id)) {
-			return new ResponseEntity<TransionUser>(HttpStatus.PRECONDITION_FAILED);
+			return new ResponseEntity<TransionUser>(HttpStatus.BAD_REQUEST);
 		}
 
 		transionUserService.delete(id);
@@ -116,7 +109,23 @@ public class TransionUserController {
 	}
 
 	@RequestMapping(value = "/findemail", method = RequestMethod.GET, params = { "username" })
-	public ResponseEntity<TransionUser> findByEmail(@RequestParam(value = "username") String username){
-		return new ResponseEntity<TransionUser>(transionUserService.findByEmail(username), HttpStatus.OK);
+	public ResponseEntity<TransionUser> findByUsername(@RequestParam(value = "username") String username){
+		return new ResponseEntity<TransionUser>(transionUserService.findByUsername(username), HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/activateAccount/{userName}", method = RequestMethod.GET)
+	public ResponseEntity<TransionUser> sendConfirmationMailForSignUp(@PathVariable String userName) {
+
+		TransionUser user = transionUserService.findByUsername(userName);
+		if(user == null) {
+			return new ResponseEntity<TransionUser>(user, HttpStatus.NOT_FOUND);
+		} 
+		
+		user.setIsActivated(true);
+		transionUserService.save(user);
+		
+		return new ResponseEntity<TransionUser>(user, HttpStatus.OK);
+	}
+	
+	
 }

@@ -3,6 +3,8 @@ package com.example.Transion.app.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.mail.MessagingException;
+
 import org.bson.types.ObjectId;
 
 import com.example.Transion.app.model.Address;
@@ -28,12 +30,12 @@ public interface TransionUserService {
 
 	public void deleteAll(List<TransionUser> items);
 	
-	public TransionUser findByEmail(String email);
+	public TransionUser findByUsername(String username);
 	
 	public String passwordEncrypt(String password);
 	
-	public List<TransionUser> findByCountry(String country);
-	
 	public Address saveAddress(Address address);
+	
+	public void sendConfirmationEmail(TransionUser user) throws MessagingException;
 	
 }

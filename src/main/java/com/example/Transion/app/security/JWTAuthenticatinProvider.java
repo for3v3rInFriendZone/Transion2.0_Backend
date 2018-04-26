@@ -31,12 +31,12 @@ public class JWTAuthenticatinProvider implements AuthenticationProvider{
 	
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		String email = (String) authentication.getPrincipal();
+		String username = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
         
-        TransionUser user = userService.findByEmail(email);
+        TransionUser user = userService.findByUsername(username);
         
-        if(user == null || !encoder.matches(password, user.getPassword())) {
+        if(user == null || !user.getIsActivated() || !encoder.matches(password, user.getPassword())) {
         	return null;
         }
         
@@ -45,7 +45,7 @@ public class JWTAuthenticatinProvider implements AuthenticationProvider{
         											.map(authority -> new SimpleGrantedAuthority(authority))
         											.collect(Collectors.toList());
         
-		return new UsernamePasswordAuthenticationToken(email, password, authorities);
+		return new UsernamePasswordAuthenticationToken(username, password, authorities);
 	}
 
 	@Override

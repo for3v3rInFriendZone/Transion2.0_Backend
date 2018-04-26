@@ -12,9 +12,5 @@ import com.example.Transion.app.model.TransionUser;
 @Repository
 public interface TransionUserRepository extends MongoRepository<TransionUser, ObjectId> {
 
-	public TransionUser findByEmail(String email);
-
-	// ne radi trenutno
-	@Query("{'address.country': ?0}")
-	public List<TransionUser> findByCountry(String country);
+	public TransionUser findByUsername(String email);
 }
