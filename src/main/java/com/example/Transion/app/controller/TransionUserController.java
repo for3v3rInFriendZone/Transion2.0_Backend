@@ -117,7 +117,16 @@ public class TransionUserController {
 
 	@RequestMapping(value = "/findemail", method = RequestMethod.GET, params = { "username" })
 	public ResponseEntity<TransionUser> findByUsername(@RequestParam(value = "username") String username){
-		return new ResponseEntity<TransionUser>(transionUserService.findByUsername(username), HttpStatus.OK);
+		if(StringUtils.isEmpty(username)) {
+			return new ResponseEntity<TransionUser>(HttpStatus.BAD_REQUEST);
+		}
+		
+		TransionUser transionUser = transionUserService.findByUsername(username);
+		if (transionUser != null) {
+			return new ResponseEntity<TransionUser>(transionUser, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<TransionUser>(HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	@RequestMapping(value = "/activateAccount/{userId}", method = RequestMethod.GET)

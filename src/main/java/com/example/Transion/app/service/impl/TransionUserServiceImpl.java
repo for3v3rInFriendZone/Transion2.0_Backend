@@ -96,11 +96,13 @@ public class TransionUserServiceImpl implements TransionUserService {
 
 	@Override
 	public void sendConfirmationEmail(TransionUser user) throws MessagingException {
+		final long ONEDAY = 86_400_000; //how long link will be valid until email has been sent.
 		MimeMessage mimeMessage = mail.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
+		Long linkExpirationDate = System.currentTimeMillis() + ONEDAY;
 		
 		String msg1 = "Dobar dan, <i>" + user.getFirstname() + "</i><br/> " + "Jos samo malo je potrebno da se uspesno registrujete. <br/> "
-				+ "Posetite ovaj <a href='http://localhost:3000/potvrda/" + user.getId() + "'>link</a> i aktiviracete svoj profil. <br/>";
+				+ "Posetite ovaj <a href='http://localhost:3000/potvrda/" + user.getId() + "/" + linkExpirationDate + "'>link</a> i aktiviracete svoj profil. <br/>";
 		String msg2 = "Prijatan dan Vam zeli <br/> <hr/> vas <span style='color:#265D0C; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; '>Transion</span> tim.";
 		
 		mimeMessage.setContent(msg1+msg2, "text/html");
