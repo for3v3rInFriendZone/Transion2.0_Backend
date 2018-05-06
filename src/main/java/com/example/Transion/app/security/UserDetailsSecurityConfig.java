@@ -48,6 +48,7 @@ public class UserDetailsSecurityConfig extends WebSecurityConfigurerAdapter{
         	.antMatchers(HttpMethod.POST, "/login").permitAll()
         	.antMatchers(HttpMethod.GET, "/api/transionUser/save").permitAll()
         	.antMatchers(HttpMethod.POST, "/api/transionUser").permitAll()
+        	.antMatchers(HttpMethod.GET, "/api/transionUser/activateAccount/{userId}").permitAll()
         	.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
         	.anyRequest().authenticated()
         	.and()

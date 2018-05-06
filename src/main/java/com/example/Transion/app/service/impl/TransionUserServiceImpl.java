@@ -39,8 +39,6 @@ public class TransionUserServiceImpl implements TransionUserService {
 
 	@Override
 	public TransionUser save(TransionUser item) {
-		item.setAddress(addressRepository.save(item.getAddress()));
-		item.setIsActivated(false);
 		return transionUserRepo.save(item);
 	}
 
@@ -102,8 +100,8 @@ public class TransionUserServiceImpl implements TransionUserService {
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
 		
 		String msg1 = "Dobar dan, <i>" + user.getFirstname() + "</i><br/> " + "Jos samo malo je potrebno da se uspesno registrujete. <br/> "
-				+ "Posetite ovaj <a href='http://localhost:8080/#!/registrationConfirmation/" +user.getUsername()+ "'>link</a> i aktiviracete svoj profil. <br/>";
-		String msg2 = "Sve najbolje Vam zeli vas <br/> <hr/> Vas <span style='color:#004D40;'>Transion</span> tim.";
+				+ "Posetite ovaj <a href='http://localhost:3000/potvrda/" + user.getId() + "'>link</a> i aktiviracete svoj profil. <br/>";
+		String msg2 = "Prijatan dan Vam zeli <br/> <hr/> vas <span style='color:#265D0C; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; '>Transion</span> tim.";
 		
 		mimeMessage.setContent(msg1+msg2, "text/html");
 		helper.setFrom("TransionTim");

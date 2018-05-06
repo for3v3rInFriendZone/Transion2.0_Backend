@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.Transion.app.model.Address;
 import com.example.Transion.app.model.Agency;
 import com.example.Transion.app.model.TransionUser;
+import com.example.Transion.app.repository.AddressRepository;
 import com.example.Transion.app.service.AgencyService;
 import com.example.Transion.app.service.TransionUserService;
 
@@ -35,6 +36,9 @@ public class TransionUserController {
 	
 	@Autowired
 	AgencyService aService;
+	
+	@Autowired
+	AddressRepository addressRepository;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<TransionUser>> getTransionUsers() {
@@ -62,6 +66,9 @@ public class TransionUserController {
 		}
 
 		user.setPassword(transionUserService.passwordEncrypt(user.getPassword()));
+		user.setAddress(addressRepository.save(user.getAddress()));
+		user.setIsActivated(false);
+		
 		TransionUser savedUser = transionUserService.save(user);
 		transionUserService.sendConfirmationEmail(savedUser);
 		
@@ -113,19 +120,22 @@ public class TransionUserController {
 		return new ResponseEntity<TransionUser>(transionUserService.findByUsername(username), HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/activateAccount/{userName}", method = RequestMethod.GET)
-	public ResponseEntity<TransionUser> sendConfirmationMailForSignUp(@PathVariable String userName) {
+	@RequestMapping(value = "/activateAccount/{userId}", method = RequestMethod.GET)
+	public ResponseEntity<TransionUser> sendConfirmationMailForSignUp(@PathVariable ObjectId userId) {
 
-		TransionUser user = transionUserService.findByUsername(userName);
-		if(user == null) {
-			return new ResponseEntity<TransionUser>(user, HttpStatus.NOT_FOUND);
-		} 
+		if (StringUtils.isEmpty(userId)) {
+			return new ResponseEntity<TransionUser>(HttpStatus.BAD_REQUEST);
+		}
+
+		Optional<TransionUser> transionUser = transionUserService.findOne(userId);
+		if (!transionUser.isPresent()) {
+			return new ResponseEntity<TransionUser>(HttpStatus.NOT_FOUND);
+		}
+		TransionUser activatedUser = transionUser.get();
 		
-		user.setIsActivated(true);
-		transionUserService.save(user);
+		activatedUser.setIsActivated(true);
 		
-		return new ResponseEntity<TransionUser>(user, HttpStatus.OK);
+		return new ResponseEntity<TransionUser>(transionUserService.save(activatedUser), HttpStatus.OK);
 	}
-	
 	
 }
