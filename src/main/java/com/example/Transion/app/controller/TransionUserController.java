@@ -24,6 +24,7 @@ import com.example.Transion.app.model.Address;
 import com.example.Transion.app.model.Agency;
 import com.example.Transion.app.model.TransionUser;
 import com.example.Transion.app.repository.AddressRepository;
+import com.example.Transion.app.service.AddressService;
 import com.example.Transion.app.service.AgencyService;
 import com.example.Transion.app.service.TransionUserService;
 
@@ -38,7 +39,7 @@ public class TransionUserController {
 	AgencyService aService;
 	
 	@Autowired
-	AddressRepository addressRepository;
+	AddressService addressService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<TransionUser>> getTransionUsers() {
@@ -64,9 +65,13 @@ public class TransionUserController {
 		if (user == null) {
 			return new ResponseEntity<TransionUser>(HttpStatus.BAD_REQUEST);
 		}
-
+		//saving agency address to database.
+		Agency agency = user.getAgency();
+		agency.setAddress(addressService.save(agency.getAddress()));
+		
 		user.setPassword(transionUserService.passwordEncrypt(user.getPassword()));
-		user.setAddress(addressRepository.save(user.getAddress()));
+		user.setAddress(addressService.save(user.getAddress()));
+		user.setAgency(aService.save(agency));
 		user.setIsActivated(false);
 		
 		TransionUser savedUser = transionUserService.save(user);
@@ -86,7 +91,7 @@ public class TransionUserController {
 	//	TransionUser user1 = new TransionUser("Petar", "Petrovic", "pera@gmail.com", transionUserService.passwordEncrypt("admin"), "0802993880018", "1122233", address, li);
 		TransionUser user = new TransionUser("Petar", "Petrovic", "pera@gmail.com", "Djoka",
 				"Srpsko", "M", "VII", transionUserService.passwordEncrypt("admin"),
-				"12314", "asd", li, address, agency, true);
+				"12314", "asd", li, address, agency);
 		return new ResponseEntity<TransionUser>(transionUserService.save(user), HttpStatus.CREATED);
 	}
 

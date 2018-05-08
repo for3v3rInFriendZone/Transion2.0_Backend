@@ -48,6 +48,7 @@ public class TransionUser {
 
 	public TransionUser() {
 		super();
+		this.isActivated = false;
 	}
 
 	public TransionUser(String firstname, String lastname, String username, String password, String jmbg,
@@ -61,11 +62,12 @@ public class TransionUser {
 		this.phoneNumber = phoneNumber;
 		this.address = address;
 		this.authorities = authorities;
+		this.isActivated = false;
 	}
 
 	public TransionUser(String firstname, String lastname, String username, String parentsName,
 			String citizenship, String sex, String education, String password, String jmbg,
-			String phoneNumber, List<String> authorities, Address address, Agency agency, Boolean isActivated) {
+			String phoneNumber, List<String> authorities, Address address, Agency agency) {
 		super();
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -80,7 +82,7 @@ public class TransionUser {
 		this.authorities = authorities;
 		this.address = address;
 		this.agency = agency;
-		this.isActivated = isActivated;
+		this.isActivated = false;
 	}
 	
 	public Boolean getIsActivated() {

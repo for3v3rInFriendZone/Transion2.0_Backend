@@ -33,6 +33,29 @@ public class Agency {
 	private String phone;
 	
 	private String email;
+	
+	public Agency() {
+		super();
+	}
+
+	public Agency(String name, String fullName, String pib, String uniqueKey, String accountNumber, String activityCode,
+			Date registrationDate, Address address, String phone, String email) {
+		super();
+		this.name = name;
+		this.fullName = fullName;
+		this.pib = pib;
+		this.uniqueKey = uniqueKey;
+		this.accountNumber = accountNumber;
+		this.activityCode = activityCode;
+		this.registrationDate = registrationDate;
+		this.address = address;
+		this.phone = phone;
+		this.email = email;
+	}
+
+	public ObjectId getId() {
+		return id;
+	}
 
 	public String getName() {
 		return name;
@@ -111,21 +134,6 @@ public class Agency {
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public Agency(String name, String fullName, String pib, String uniqueKey, String accountNumber, String activityCode,
-			Date registrationDate, Address address, String phone, String email) {
-		super();
-		this.name = name;
-		this.fullName = fullName;
-		this.pib = pib;
-		this.uniqueKey = uniqueKey;
-		this.accountNumber = accountNumber;
-		this.activityCode = activityCode;
-		this.registrationDate = registrationDate;
-		this.address = address;
-		this.phone = phone;
 		this.email = email;
 	}
 		
